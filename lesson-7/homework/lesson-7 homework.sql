@@ -1,170 +1,140 @@
-create database lesson7_homework
+-----EASY LEVEL TASKS -----
 
-----------EASY LEVEL TASKS------------------
---1
-select MIN(PRICE) AS Minimum_price
-from products
+--1.Write a query to find the minimum (MIN) price of a product in the Products table.
+select min(price) as min_price
+from Products
 
---2
-select max(salary) as Maximum_salary
+--2.Write a query to find the maximum (MAX) Salary from the Employees table.
+select max(Salary) as max_salary
 from Employees
 
---3
-select count(*) as Number_of_rows
-from customers
+--3.Write a query to count the number of rows in the Customers table using COUNT(*).
+select count(*) as number_of_rows
+from Customers
 
---4
-select count(distinct Category) as Number_of_categories
-from products
+--4.Write a query to count the number of unique product categories (COUNT(DISTINCT Category)) from the Products table.
+select count(distinct category) as Number_Of_Categories
+from Products
 
---5
-select ProductID, SUM(SaleAmount) as Sales_per_product
+--5.Write a query to find the total (SUM) sales amount for the product with id 7 in the Sales table.
+select ProductID, sum(SaleAmount) as Total_sales
 from Sales
-group by productid
+where ProductID = 7
+group by ProductID
 
---6
-select avg(age) as Average_age
+--6.Write a query to calculate the average (AVG) age of employees in the Employees table.
+select avg(age) as average_age
 from Employees
 
---7
-select departmentid, count(EmployeeID) as Number_of_Employees
+--7.Write a query that uses GROUP BY to count the number of employees in each department.
+select DepartmentName, count(EmployeeID) as Number_of_Employees
 from Employees
-group by DepartmentID
+group by DepartmentName
 
---8
-select Category, min(price) as Minimum_price, max(price) as Maximum_price
+--8.Write a query to show the minimum and maximum Price of products grouped by Category. Use products table.
+select Category, max(price) as Maximum_price , min(price) as Minimum_price
 from Products
 group by Category
 
---9
-select Region, sum(SaleAmount) as Sales_Amount
+--9.Write a query to calculate the total (SUM) sales per Customer in the Sales table.
+select CustomerID, sum(SaleAmount) as Total_Sales
 from Sales
-group by Region
+group by CustomerID
 
---10
-
-select DepartmentID, count(EmployeeID) as Number_of_employees
-from employees
-group by DepartmentID
+--10.Write a query to use HAVING to filter departments having more than 5 employees from the Employees table.(DeptID is enough, if you don't have DeptName).
+select DepartmentName, count(EmployeeID) AS Number_of_Employees
+from Employees
+group by DepartmentName
 having count(EmployeeID) > 5
 
+----MEDIUM LEVEL TASKS---
 
-----------MEDIUM LEVEL TASKS------------------
+--11.Write a query to calculate the total sales and average sales for each product category from the Sales table.
+select p.Category, sum(SaleAmount) as Total_sales, avg(SaleAmount) as avg_sales
+from Sales as s
+join Products as p
+on s.ProductID = p.ProductID
+group by p.Category
 
---11
-select Category, avg(saleamount) as Average_sales, sum(saleamount) as Total_sales
-from Sales
-group by Category
-
---12
-select JobTitle, count(*)
+--12.Write a query that uses COUNT(columnname) to count the number of employees from the Department HR.
+select DepartmentName, count(EmployeeID) as Number_of_Employees
 from Employees
-group by JobTitle
+where DepartmentName = 'HR'
+group by DepartmentName
 
---13
-select DepartmentID, max(salary) as maximum_salary, min(salary) as minimum_salary
+--13.Write a query that finds the highest (MAX) and lowest (MIN) Salary by department in the Employees table.(DeptID is enough, if you don't have DeptName).
+select DepartmentName, max(salary) as Max_salary,min(salary) as Min_salary
 from Employees
-group by DepartmentID
+group by DepartmentName
 
---14
-select DepartmentID, avg(salary) as Average_salary
-from employees
-group by DepartmentID
-
---15
-select DepartmentID, avg(salary) as Average_salary, count(*) as Number_of_Employees
+--14.Write a query that uses GROUP BY to calculate the average salary per Department.(DeptID is enough, if you don't have DeptName).
+select DepartmentName, avg(salary) as average_salary
 from Employees
-group by DepartmentID
+group by DepartmentName
 
---16
-select ProductName, avg(price) as Average_Price
+--15.Write a query to show the AVG salary and COUNT(*) of employees working in each department.(DeptID is enough, if you don't have DeptName).
+select DepartmentName, avg(salary) as average_salary, count(EmployeeID) AS Number_of_Employees
+from Employees
+group by DepartmentName
+
+--16.Write a query that uses HAVING to filter product categories with an average price greater than 400.
+select Category, avg(price) as average_price
 from Products
-group by ProductName
-having avg(price) > 100
-
---17
-SELECT COUNT(DISTINCT PRODUCTID) AS ProductCount
-FROM SALES
-GROUP BY PRODUCTID
-HAVING SUM(SALEUNITS) > 100
-
---18
-select year, sum(saleamount) as Total_sales
-from sales
-group by year
-
---19
-select Region, count(customerid) as Number_of_Customers 
-from Orders
-group by Region
-
---20
-select DepartmentID, sum(Salary) as Salary_Expenses
-from Employees
-group by DepartmentID
-having sum(Salary) > 100000
-
-
-----------HARD LEVEL TASKS------------------
-
---21
-select Categopry,avg(Saleamount) as Sales
-from Sales
 group by Category
-having avg(saleamount)>200
+having avg(price) > 400
 
---22
-select Employeeid, SUM(SALEAMOUNT) as Sales
-from employees
-group by Employeeid
-having sum(saleamount) > 5000
-
---23
-select DepartmentID, sum(salary) as Total_salary, avg(salary) as Average_salary
-from Employees
-group by DepartmentID
-having avg(salary)>6000
-
---24
-select Customerid, max(order_value), min(order_value)
-from orders
-group by CustomerID
-having order_value > 50
-
---25
-select region,sum(salesamount),count(distinct productid)
-from sales
-group by region
-having count(distinct productid) > 10
-
---26
-SELECT 
-    Category,
-    MIN(OrderQuantity) AS MinOrderQuantity,
-    MAX(OrderQuantity) AS MaxOrderQuantity
-FROM Orders
-WHERE ProductID IN (SELECT ProductID FROM CategoryTable)
-GROUP BY Category
-ORDER BY Category
-
---27.
-select *
+--17.Write a query that calculates the total sales for each year in the Sales table, and use GROUP BY to group them.
+select year(SaleDate) as _Year_, sum(SaleAmount) as Total_sales
 from Sales
-pivot(sum(sales) for [region] in ([Tashkent], [Samarqand], [Nukus]) as pivot_table
+group by year(SaleDate) 
 
---28
-select pvt.PERIOD, pvt.[sales]
-from sales
-unpivot(sales for [PERIOD] IN ([Q1], [Q2], [Q3],[Q4]) as pvt
+--18.Write a query that uses COUNT to show the number of customers who placed at least 3 orders.
+select CustomerID, count(OrderID) as Number_of_orders
+from Orders
+group by CustomerID
+having count(OrderID) >= 3
 
---29
-select p.product_category, p.product_name, count(o.order_id) as total_orders
-from orders o
-join products p on o.product_id = p.product_id
-group by p.product_category, p.product_name
-having count(o.order_id) > 50
+--19.Write a query that applies the HAVING clause to filter out Departments with total salary expenses greater than 500,000.(DeptID is enough, if you don't have DeptName).
+select DepartmentName, SUM(SALARY) AS Total_salary
+from Employees
+group by DepartmentName
+having sum(Salary) > 500000
 
---30
-select *
-from EmployeeSales
-pivot(sum(sales) for [QUARTER] in ([Q1], [Q2], [Q3], [Q4]) as pivot_table
+
+---HARD LEVEL TASKS----
+--20.Write a query that shows the average (AVG) sales for each product category, and then uses HAVING to filter categories with an average sales amount greater than 200.
+select p.Category, AVG(SaleAmount) as average_sales
+from Sales as s
+join Products as p
+on s.ProductID = p.ProductID
+group by p.Category
+having avg(SaleAmount) > 200
+
+--21.Write a query to calculate the total (SUM) sales for each Customer, then filter the results using HAVING to include only Customers with total sales over 1500.
+select CustomerID,sum(SaleAmount) as Total_sales
+from Sales
+group by CustomerID
+having sum(SaleAmount) > 1500
+
+--22.Write a query to find the total (SUM) and average (AVG) salary of employees grouped by department, and use HAVING to include only departments with an average salary greater than 65000.
+select DepartmentName, sum(Salary) as Total_salary, avg(Salary) as Average_salary
+from Employees
+group by DepartmentName
+having avg(salary) > 65000
+
+--23.Write a query that finds the maximum (MAX) and minimum (MIN) order value for each customer, and then applies HAVING to exclude customers with an order value less than 50.
+select CustomerID, max(TotalAmount) as max_order_value, min(TotalAmount) as min_order_value
+from Orders
+group by CustomerID
+having min(TotalAmount) > 50
+
+--24.Write a query that calculates the total sales (SUM) and counts distinct products sold in each month, and then applies HAVING to filter the months with more than 8 products sold.
+select MONTH(SaleDate) as _month_, sum(SaleAmount) as Total_sales, count(distinct ProductID) as Number_of_distinct_products
+from Sales
+group by MONTH(SaleDate)
+having count(distinct ProductID) > 8
+
+--25.Write a query to find the MIN and MAX order quantity per Year. From orders table. (Do some research)
+select year(OrderDate) as Years, min(quantity) as minimum_quantity, max(quantity) as maximum_quantity
+from Orders
+group by year(OrderDate)
