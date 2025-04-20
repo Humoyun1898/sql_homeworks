@@ -1,102 +1,112 @@
-create database les1_homework
---Easy--
---1.Define the following terms: data, database, relational database, and table.
-Data is the information, figure or facts that does not mean anything and then can be processed and recorded
+--create database les2_homework
 
---2.List five key features of SQL Server.
--1.Organized Data Storage - SQL Server helps you store data in a clean and structured way, using tables.
--2. Smart Query Language (T-SQL)-It uses a special language called T-SQL, which lets you do more than just basic data tasks. You can write code with logic, loops, and conditions to handle complex operations smoothly.
--3. Strong Security Tools - SQL Server takes data protection seriously. It has built-in features like password protection, permission control, and encryption to keep your data safe from unauthorized access.
--4.Reliable Backup System - It can automatically save backups and restore your database to a previous point if something goes wrong.
--5.Built-in Data Tools - It comes with handy tools for moving data, creating reports, and analyzing information. 
+--Basic-Level Tasks (10)
 
---3. What are the different authentication modes available when connecting to SQL Server? (Give at least 2)
-1. Windows Authentication
-This type of login lets you use your regular Windows account to access SQL Server. Since it works with the same security settings as your operating system (like passwords and permissions), 
-it's generally more secure and easier to manage—especially in workplaces where everyone already has a Windows login.
+--1.Create a table Employees with columns: EmpID INT, Name (VARCHAR(50)), and Salary (DECIMAL(10,2)).
+create table Employees (EmpID INT, Name VARCHAR(50), Salary DECIMAL(10,2))
 
-2. SQL Server Authentication
-Here, you sign in with a specific username and password created directly in SQL Server. 
-It doesn't depend on your Windows account, which makes it handy when you need to connect from outside a Windows environment or allow access to someone who doesn’t have a Windows login.
+--2.Insert three records into the Employees table using different INSERT INTO approaches (single-row insert and multiple-row insert).
+insert into Employees values (1,'Johny',50000)
+insert into Employees values (2,'Rony',55000), (1,'Samy',60000)
 
----Medium---
---4.Create a new database in SSMS named SchoolDB.
-create database SchoolDB
+--3.Update the Salary of an employee where EmpID = 1.
+update Employees
+set Salary = 90000
+where EmpID = 1
 
---5. Write and execute a query to create a table called Students with columns: StudentID (INT, PRIMARY KEY), Name (VARCHAR(50)), Age (INT).
-create table students (StudentID INT, PRIMARY KEY, Name VARCHAR(50), Age INT)
+--4.Delete a record from the Employees table where EmpID = 2.
+delete Employees
+where EmpID = 2
 
---6.Describe the differences between SQL Server, SSMS, and SQL.
-SQL Server
-This is the actual database system built by Microsoft.
-SSMS is a tool you use to interact with SQL Server. 
-SQL is the language you use to communicate with the database.
+--5.Demonstrate the difference between DELETE, TRUNCATE, and DROP commands on a test table.
+Delete - helps to remove some part of the data in the table
+Truncate - removes all rows from table
+drop - removes the table from the database
 
----Hard-----
---7.Research and explain the different SQL commands: DQL, DML, DDL, DCL, TCL with examples.
-DQL – Data Query Language 
-Purpose: To fetch data from the database
-Main command: SELECT
+--6.Modify the Name column in the Employees table to VARCHAR(100).
+alter table Employees
+alter column Name varchar(100)
 
-DML – Data Manipulation Language
-Purpose: To work with the actual data in the database (insert, update, delete).
-Commands: INSERT, UPDATE, DELETE
+--7.Add a new column Department (VARCHAR(50)) to the Employees table.
+alter table Employees
+add Department varchar(50)
 
-DDL – Data Definition Language
-Purpose: To define or change the structure of the database objects like tables or schemas.
-Commands: CREATE, ALTER, DROP, TRUNCATE
+--8.Change the data type of the Salary column to FLOAT.
+alter table	Employees
+alter column Salary float
 
-DCL – Data Control Language
-Purpose: To control access to the data in the database (permissions).
-Commands: GRANT, REVOKE
+--9.Create another table Departments with columns DepartmentID (INT, PRIMARY KEY) and DepartmentName (VARCHAR(50)).
+create table Departments (DepartmentID INT PRIMARY KEY, DepartmentName varchar(50))
 
-TCL – Transaction Control Language
-Purpose: To manage transactions, which are groups of operations that should be completed together.
-Commands: COMMIT, ROLLBACK, SAVEPOINT
+--10.Remove all records from the Employees table without deleting its structure.
+truncate table Employees
 
---8.Write a query to insert three records into the Students table.
-insert into Students values ( 1 ,'John', 25),(2, 'Adam',34),(3,'Ray',44)
 
---9.Create a backup of your SchoolDB database and restore it. (write its steps to submit)
--Open SQL Server Management Studio (SSMS) and connect to your SQL Server instance.
+--Intermediate-Level Tasks (6)
 
--In the Object Explorer, expand the Databases folder.
+--10.Insert five records into the Departments table using INSERT INTO SELECT from an existing table.
+insert into Departments (DepartmentID, DepartmentName)
+select DepartmentID, DepartmentName from lesson15_homework.dbo.Departments
 
--Right-click on SchoolDB, go to Tasks → Back Up...
+--11.Update the Department of all employees where Salary > 5000 to 'Management'.
+update Employees
+set Department = 'Management'
+where Salary > 5000
 
--In the Back Up Database window:
+--12.Write a query that removes all employees but keeps the table structure intact.
+truncate table Employees
 
--Backup type: Choose Full
+--13.Drop the Department column from the Employees table.
+alter table Employees
+drop column Department
 
--Backup component: Select Database
+--14.Rename the Employees table to StaffMembers using SQL commands.
+exec sp_rename 'dbo.Employees','StaffMembers'
 
--Destination: Choose a backup location (click Remove to clear old path and Add to specify a new one, like:C:\Backups\SchoolDB.bak)
+--15.Write a query to completely remove the Departments table from the database.
+drop table Departments
 
--Click OK to start the backup process.
+--Advanced-Level Tasks (9)----
 
--A message will appear: "The backup of database 'SchoolDB' completed successfully."
+--16.Create a table named Products with at least 5 columns, including: ProductID (Primary Key), ProductName (VARCHAR), Category (VARCHAR), Price (DECIMAL)
+create table Products (ProductID int Primary Key, ProductName VARCHAR(30), Category VARCHAR(30), Price DECIMAL)
 
--Right-click SchoolDB → Delete → Check Close existing connections → Click OK
+--17.Add a CHECK constraint to ensure Price is always greater than 0.
+alter table Products
+add constraint checking check(Price>0)
 
--Now go to Databases → Right-click → Restore Database...
+--18.Modify the table to add a StockQuantity column with a DEFAULT value of 50.
+alter table Products
+add StockQuantity int 
+default (50)
 
--In the Restore Database window:
+--19.Rename Category to ProductCategory
+exec sp_rename 'dbo.products.Category','ProductCategory'
 
--Select Device, then click the ... button.
+--20.Insert 5 records into the Products table using standard INSERT INTO queries.
+insert into Products values (1,'Phone','Electronics', 250, 40),
+							(2,'Refrigator','Electronics', 350, 10),
+							(3,'mersedes','Cars', 11000, 15),
+							(4,'Arbidol','Medecine', 350, 10),
+							(5,'Chair','Furniture', 50, 10)
 
--Click Add, then browse and select the .bak file you created earlier (e.g., C:\Backups\SchoolDB.bak)
+--21.Use SELECT INTO to create a backup table called Products_Backup containing all Products data.
+select *
+into Products_Backup
+from Products
 
--Click OK
+--22. Rename the Products table to Inventory.
+exec sp_rename 'dbo.Products','Inventory'
 
--In the Restore Database window:
+--23.Alter the Inventory table to change the data type of Price from DECIMAL(10,2) to FLOAT.
+alter table Inventory
+drop constraint checking
+alter table Inventory
+alter column Price float
 
--Under Destination, rename the database if needed
-
--Under Restore options, check Overwrite the existing database (WITH REPLACE) if restoring over an existing one
-
--Click OK to begin the restore process.
-
--A message will appear: "Database 'SchoolDB' restored successfully."
+--24.Add an IDENTITY column named ProductCode that starts from 1000 and increments by 5.
+alter table	Inventory
+add ProductCode int identity(1000,5)
 
 
 
